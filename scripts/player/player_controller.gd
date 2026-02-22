@@ -11,7 +11,7 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.005
 
 @onready var camera_pivot: Node3D = $CameraPivot
-@onready var visual: MeshInstance3D = $Visual
+@onready var visual: Node3D = $Visual
 
 var camera_yaw: float = 0.0
 var camera_pitch: float = 0.0
