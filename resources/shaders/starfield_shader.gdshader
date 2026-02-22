@@ -20,19 +20,15 @@ void fragment() {
     // Random value for this grid cell
     float star_rand = rand(floor(uv));
     
-    // Only show stars for some cells
-    if (star_rand < 0.7) {
-        ALBEDO = vec3(0.0);
-        ALPHA = 0.0;
-        return;
-    }
+    // Only show stars for some cells (30% chance)
+    float star_exists = step(0.7, star_rand);
     
     // Twinkle effect
     float twinkle = 0.5 + 0.5 * sin(TIME * twinkle_speed * 3.0 + star_rand * 10.0);
     
     // Star shape - sharp point
     float star = 1.0 - smoothstep(0.0, 0.15, dist);
-    star *= twinkle;
+    star *= twinkle * star_exists;
     
     // Color variation
     vec3 color = mix(star_color1.rgb, star_color2.rgb, star_rand);
