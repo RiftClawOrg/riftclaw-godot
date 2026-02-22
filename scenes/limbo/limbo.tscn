@@ -1,120 +1,173 @@
-[gd_scene load_steps=9 format=3 uid="uid://limbo_world_001"]
+[gd_scene load_steps=15 format=3 uid="uid://limbo_world_v2"]
 
-[ext_resource type="PackedScene" uid="uid://player_scene_001" path="res://scenes/player.tscn" id="1_player"]
-[ext_resource type="PackedScene" uid="uid://portal_scene_001" path="res://scenes/components/portal.tscn" id="2_portal"]
-[ext_resource type="PackedScene" uid="uid://crystal_scene_001" path="res://scenes/components/crystal.tscn" id="3_crystal"]
+[ext_resource type="PackedScene" uid="uid://player_scene_002" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://portal_scene_002" path="res://scenes/components/portal.tscn" id="2_portal"]
+[ext_resource type="PackedScene" uid="uid://crystal_scene_002" path="res://scenes/components/crystal.tscn" id="3_crystal"]
+[ext_resource type="Shader" path="res://resources/shaders/grid_shader.gdshader" id="4_grid_shader"]
+[ext_resource type="Shader" path="res://resources/shaders/starfield_shader.gdshader" id="5_star_shader"]
 
-[sub_resource type="Environment" id="Environment_limbo"]
+[sub_resource type="Environment" id="Environment_limbo_v2"]
 background_color = Color(0.0196078, 0.0196078, 0.0627451, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.25098, 0.25098, 0.376471, 1)
-ambient_light_energy = 0.5
+ambient_light_color = Color(0.15, 0.15, 0.25, 1)
+ambient_light_energy = 0.8
 fog_enabled = true
 fog_mode = 1
 fog_color = Color(0.0196078, 0.0196078, 0.0627451, 1)
-fog_density = 0.02
+fog_density = 0.015
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
-size = Vector2(50, 50)
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor_v2"]
+size = Vector2(100, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.0392157, 0.0392157, 0.0823529, 1)
-roughness = 0.8
-metallic = 0.2
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor_v2"]
+albedo_color = Color(0.02, 0.02, 0.04, 1)
+roughness = 0.9
+metallic = 0.1
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_floor"]
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_floor_v2"]
 plane = Plane(0, 1, 0, 0)
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_stars"]
-emission_shape = 6
-emission_sphere_radius = 100.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 0.0
-initial_velocity_max = 0.0
+[sub_resource type="PlaneMesh" id="PlaneMesh_grid"]
+size = Vector2(100, 100)
 
-[sub_resource type="BoxMesh" id="BoxMesh_star"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_grid"]
+shader = ExtResource("4_grid_shader")
+shader_parameter/grid_color = Color(0.04, 0.04, 0.1, 1)
+shader_parameter/center_color = Color(0, 0.835, 1, 1)
+shader_parameter/grid_size = 100.0
+shader_parameter/divisions = 50.0
+shader_parameter/line_width = 0.02
+
+[sub_resource type="SphereMesh" id="SphereMesh_starfield"]
+radius = 200.0
+height = 400.0
+radial_segments = 64
+rings = 64
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_starfield"]
+shader = ExtResource("5_star_shader")
+shader_parameter/star_color1 = Color(1, 1, 1, 1)
+shader_parameter/star_color2 = Color(0, 0.835, 1, 1)
+shader_parameter/star_density = 150.0
+shader_parameter/twinkle_speed = 0.8
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_portal_glow"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.5
+angular_velocity_min = -1.0
+angular_velocity_max = 1.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+scale_min = 0.02
+scale_max = 0.08
+color = Color(0, 0.835, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_particle"]
 size = Vector3(0.05, 0.05, 0.05)
 
 [node name="Limbo" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_limbo")
+environment = SubResource("Environment_limbo_v2")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 5, 10, 5)
-light_color = Color(0, 0.835294, 1, 1)
-light_energy = 0.5
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 20, 20, 20)
+light_color = Color(0, 0.835, 1, 1)
+light_energy = 0.8
+shadow_enabled = true
 
 [node name="Floor" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_floor")
-surface_material_override/0 = SubResource("StandardMaterial3D_floor")
+mesh = SubResource("PlaneMesh_floor_v2")
+surface_material_override/0 = SubResource("StandardMaterial3D_floor_v2")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
-shape = SubResource("WorldBoundaryShape3D_floor")
+shape = SubResource("WorldBoundaryShape3D_floor_v2")
+
+[node name="GridOverlay" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("PlaneMesh_grid")
+surface_material_override/0 = SubResource("ShaderMaterial_grid")
+
+[node name="Starfield" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("SphereMesh_starfield")
+surface_material_override/0 = SubResource("ShaderMaterial_starfield")
 
 [node name="Portal" parent="." instance=ExtResource("2_portal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -15)
 world_id = "the-rift"
 world_name = "The Rift"
 world_url = "https://rift.riftclaw.com"
 
+[node name="PortalGlow" type="GPUParticles3D" parent="Portal"]
+amount = 200
+lifetime = 3.0
+process_material = SubResource("ParticleProcessMaterial_portal_glow")
+draw_pass_1 = SubResource("BoxMesh_particle")
+
 [node name="Label3D" type="Label3D" parent="Portal"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-pixel_size = 0.05
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+pixel_size = 0.03
 billboard = 1
-text = "The Rift Portal ->"
-font_size = 64
-outline_size = 8
-modulate = Color(0, 0.835294, 1, 1)
+text = "THE RIFT"
+font_size = 96
+outline_size = 12
+modulate = Color(0, 0.9, 1, 1)
 
 [node name="Crystals" type="Node3D" parent="."]
 
 [node name="Crystal1" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, -8)
+crystal_color = Color(0.9, 0.2, 1, 1)
 
 [node name="Crystal2" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, -3)
-crystal_color = Color(0.8, 0.2, 1, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3, -5)
+crystal_color = Color(0.2, 0.8, 1, 1)
 
 [node name="Crystal3" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 3, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 4, -12)
 crystal_color = Color(1, 0.4, 0.8, 1)
 
 [node name="Crystal4" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1, -12)
-crystal_color = Color(0.9, 0.2, 0.9, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.5, -15)
+crystal_color = Color(0.8, 0.3, 1, 1)
 
 [node name="Crystal5" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, -2)
-crystal_color = Color(1, 0.3, 0.6, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3.5, -3)
+crystal_color = Color(1, 0.5, 0.3, 1)
 
 [node name="Crystal6" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3.5, -15)
-crystal_color = Color(0.8, 0.1, 1, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 5, -20)
+crystal_color = Color(0.3, 0.9, 1, 1)
 
 [node name="Crystal7" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.8, -12)
-crystal_color = Color(1, 0.2, 0.7, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2.8, -18)
+crystal_color = Color(1, 0.2, 0.6, 1)
 
 [node name="Crystal8" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.2, -6)
-crystal_color = Color(0.9, 0.3, 0.9, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 3.2, -10)
+crystal_color = Color(0.6, 0.2, 1, 1)
 
 [node name="Crystal9" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -18)
-crystal_color = Color(1, 0.2, 0.8, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -25)
+crystal_color = Color(0.8, 0.8, 0.2, 1)
 
 [node name="Crystal10" parent="Crystals" instance=ExtResource("3_crystal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3, -8)
-crystal_color = Color(0.8, 0.2, 0.9, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 4, -12)
+crystal_color = Color(1, 0.3, 0.5, 1)
 
-[node name="Starfield" type="GPUParticles3D" parent="."]
-amount = 1000
-lifetime = 9999.0
-process_material = SubResource("ParticleProcessMaterial_stars")
-draw_pass_1 = SubResource("BoxMesh_star")
+[node name="Crystal11" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.5, 2)
+crystal_color = Color(0.2, 1, 0.6, 1)
+
+[node name="Crystal12" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 4.5, 5)
+crystal_color = Color(0.9, 0.6, 0.2, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 8)

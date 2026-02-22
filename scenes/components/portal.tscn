@@ -1,33 +1,61 @@
-[gd_scene load_steps=7 format=3 uid="uid://portal_scene_001"]
+[gd_scene load_steps=12 format=3 uid="uid://portal_scene_002"]
 
 [ext_resource type="Script" path="res://scenes/components/portal.gd" id="1_portal"]
+[ext_resource type="Shader" path="res://resources/shaders/portal_shader.gdshader" id="2_portal_shader"]
 
-[sub_resource type="TorusMesh" id="TorusMesh_frame"]
+[sub_resource type="TorusMesh" id="TorusMesh_frame_v2"]
 inner_radius = 1.8
 outer_radius = 2.2
-ring_segments = 16
-radial_segments = 16
+ring_segments = 64
+radial_segments = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frame"]
-albedo_color = Color(0, 0.835294, 1, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frame_v2"]
+albedo_color = Color(0, 0.835, 1, 1)
 emission_enabled = true
-emission = Color(0, 0.835294, 1, 1)
-emission_energy_multiplier = 0.5
+emission = Color(0, 0.835, 1, 1)
+emission_energy_multiplier = 2.0
+metallic = 0.8
+roughness = 0.1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_center"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_center_v2"]
 top_radius = 1.8
 bottom_radius = 1.8
 height = 0.1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_center"]
-albedo_color = Color(0, 1, 1, 0.3)
-emission_enabled = true
-emission = Color(0, 1, 1, 1)
-emission_energy_multiplier = 0.3
-transparency = 1
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_portal"]
+shader = ExtResource("2_portal_shader")
+shader_parameter/portal_color = Color(0, 1, 1, 0.6)
+shader_parameter/pulse_speed = 1.0
+shader_parameter/swirl_speed = 0.5
+shader_parameter/edge_glow = 1.5
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_portal"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_portal_v2"]
 radius = 2.5
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ring"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.5
+emission_ring_radius = 2.0
+emission_ring_inner_radius = 1.8
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.05
+initial_velocity_max = 0.2
+angular_velocity_min = -2.0
+angular_velocity_max = 2.0
+orbit_velocity_min = 0.2
+orbit_velocity_max = 0.8
+scale_min = 0.02
+scale_max = 0.06
+color = Color(0, 0.9, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_spark"]
+size = Vector3(0.03, 0.03, 0.03)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spark"]
+emission_enabled = true
+emission = Color(0, 0.9, 1, 1)
+emission_energy_multiplier = 3.0
 
 [node name="Portal" type="Area3D"]
 collision_layer = 4
@@ -39,13 +67,25 @@ world_url = "https://rift.riftclaw.com"
 
 [node name="Frame" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("TorusMesh_frame")
-surface_material_override/0 = SubResource("StandardMaterial3D_frame")
+mesh = SubResource("TorusMesh_frame_v2")
+surface_material_override/0 = SubResource("StandardMaterial3D_frame_v2")
 
 [node name="Center" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_center")
-surface_material_override/0 = SubResource("StandardMaterial3D_center")
+mesh = SubResource("CylinderMesh_center_v2")
+surface_material_override/0 = SubResource("ShaderMaterial_portal")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_portal")
+shape = SubResource("SphereShape3D_portal_v2")
+
+[node name="RingParticles" type="GPUParticles3D" parent="."]
+amount = 150
+lifetime = 4.0
+process_material = SubResource("ParticleProcessMaterial_ring")
+draw_pass_1 = SubResource("BoxMesh_spark")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0, 0.9, 1, 1)
+light_energy = 3.0
+omni_range = 15.0
+omni_attenuation = 1.5

@@ -1,15 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://crystal_scene_001"]
+[gd_scene load_steps=5 format=3 uid="uid://crystal_scene_002"]
 
 [ext_resource type="Script" path="res://scenes/components/crystal.gd" id="1_crystal"]
+[ext_resource type="Shader" path="res://resources/shaders/crystal_shader.gdshader" id="2_crystal_shader"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_crystal"]
-radius = 0.3
-height = 0.6
-radial_segments = 8
-rings = 4
+[sub_resource type="SphereMesh" id="SphereMesh_crystal_v2"]
+radius = 0.4
+height = 0.8
+radial_segments = 16
+rings = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crystal"]
+shader = ExtResource("2_crystal_shader")
+shader_parameter/crystal_color = Color(1, 0, 1, 1)
+shader_parameter/glow_intensity = 2.0
+shader_parameter/fresnel_power = 2.0
 
 [node name="Crystal" type="Node3D"]
 script = ExtResource("1_crystal")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_crystal")
+mesh = SubResource("SphereMesh_crystal_v2")
+surface_material_override/0 = SubResource("ShaderMaterial_crystal")
+
+[node name="PointLight3D" type="OmniLight3D" parent="."]
+light_color = Color(1, 0, 1, 1)
+light_energy = 2.0
+omni_range = 8.0
