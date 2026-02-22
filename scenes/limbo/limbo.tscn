@@ -8,6 +8,7 @@
 [ext_resource type="Shader" path="res://resources/shaders/dust_shader.gdshader" id="6_dust_shader"]
 
 [sub_resource type="Environment" id="Environment_limbo_v2"]
+background_mode = 1
 background_color = Color(0.0196078, 0.0196078, 0.0627451, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.15, 0.15, 0.25, 1)
@@ -15,7 +16,7 @@ ambient_light_energy = 0.8
 fog_enabled = true
 fog_mode = 1
 fog_color = Color(0.0196078, 0.0196078, 0.0627451, 1)
-fog_density = 0.015
+fog_density = 0.01
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_floor_v2"]
 size = Vector2(100, 100)
@@ -71,21 +72,21 @@ size = Vector3(0.05, 0.05, 0.05)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_stars_v2"]
 emission_shape = 6
-emission_sphere_radius = 200.0
+emission_sphere_radius = 500.0
 gravity = Vector3(0, 0, 0)
 initial_velocity_min = 0.0
 initial_velocity_max = 0.0
 angular_velocity_min = 0.0
 angular_velocity_max = 0.0
-scale_min = 0.01
-scale_max = 0.03
+scale_min = 0.5
+scale_max = 1.5
 color = Color(1, 1, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_star_v2"]
-radius = 0.5
-height = 1.0
-radial_segments = 4
-rings = 2
+radius = 2.0
+height = 4.0
+radial_segments = 8
+rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_dust"]
 radius = 150.0
