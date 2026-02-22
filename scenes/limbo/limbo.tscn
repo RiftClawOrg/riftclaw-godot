@@ -1,14 +1,15 @@
-[gd_scene load_steps=17 format=3 uid="uid://limbo_world_v2"]
+[gd_scene load_steps=18 format=3 uid="uid://limbo_world_v2"]
 
 [ext_resource type="PackedScene" path="res://scenes/player_human.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://portal_scene_002" path="res://scenes/components/portal.tscn" id="2_portal"]
 [ext_resource type="PackedScene" uid="uid://crystal_scene_002" path="res://scenes/components/crystal.tscn" id="3_crystal"]
-[ext_resource type="Shader" path="res://resources/shaders/grid_shader.gdshader" id="4_grid_shader"]
-[ext_resource type="Shader" path="res://resources/shaders/night_sky.gdshader" id="5_night_sky"]
-[ext_resource type="Shader" path="res://resources/shaders/dust_shader.gdshader" id="6_dust_shader"]
+[ext_resource type="Script" path="res://scripts/world_manager.gd" id="4_world_manager"]
+[ext_resource type="Shader" path="res://resources/shaders/grid_shader.gdshader" id="5_grid_shader"]
+[ext_resource type="Shader" path="res://resources/shaders/night_sky.gdshader" id="6_night_sky"]
+[ext_resource type="Shader" path="res://resources/shaders/dust_shader.gdshader" id="7_dust_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
-shader = ExtResource("5_night_sky")
+shader = ExtResource("6_night_sky")
 shader_parameter/sky_color = Color(0.005, 0.005, 0.015, 1)
 shader_parameter/star_density = 250.0
 
@@ -62,7 +63,7 @@ plane = Plane(0, 1, 0, 0)
 size = Vector2(100, 100)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_grid"]
-shader = ExtResource("4_grid_shader")
+shader = ExtResource("5_grid_shader")
 shader_parameter/grid_color = Color(0.04, 0.04, 0.1, 1)
 shader_parameter/center_color = Color(0, 0.835, 1, 1)
 shader_parameter/grid_size = 100.0
@@ -93,7 +94,7 @@ radial_segments = 32
 rings = 32
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dust"]
-shader = ExtResource("6_dust_shader")
+shader = ExtResource("7_dust_shader")
 shader_parameter/dust_color = Color(0.5, 0.7, 1, 0.2)
 shader_parameter/dust_density = 40.0
 shader_parameter/drift_speed = 0.3
@@ -114,6 +115,8 @@ color = Color(1, 0.9, 0.3, 0.6)
 size = Vector3(0.02, 0.02, 0.02)
 
 [node name="Limbo" type="Node3D"]
+script = ExtResource("4_world_manager")
+current_world = "limbo"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_limbo_v2")
