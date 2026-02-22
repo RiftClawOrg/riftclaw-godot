@@ -44,9 +44,9 @@ func setup_visuals():
 	center_mat.albedo_color.a = 0.3
 	center_mesh.material_override = center_mat
 
-func _process(delta):
-	# Rotate portal frame
-	rotate_y(rotation_speed * delta)
+func _process(_delta):
+	# Portal effects - currently static
+	pass
 
 func _on_body_entered(body: Node3D):
 	if body.is_in_group("player"):
