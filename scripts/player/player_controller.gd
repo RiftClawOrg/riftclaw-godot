@@ -78,7 +78,7 @@ func _physics_process(delta):
 	move_and_slide()
 	update_camera(delta)
 
-func update_camera(delta):
+func update_camera(_delta):
 	# Calculate camera position based on yaw and pitch
 	var camera_offset = Vector3(
 		sin(camera_yaw) * cos(camera_pitch) * camera_distance,
