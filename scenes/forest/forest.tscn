@@ -1,0 +1,226 @@
+[gd_scene load_steps=22 format=3 uid="uid://forest_world_001"]
+
+[ext_resource type="PackedScene" uid="uid://player_human_001" path="res://scenes/player_human.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://portal_scene_002" path="res://scenes/components/portal.tscn" id="2_portal"]
+[ext_resource type="PackedScene" uid="uid://crystal_scene_002" path="res://scenes/components/crystal.tscn" id="3_crystal"]
+[ext_resource type="Shader" path="res://resources/shaders/night_sky.gdshader" id="4_night_sky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("4_night_sky")
+shader_parameter/sky_color = Color(0.05, 0.1, 0.15, 1)
+shader_parameter/star_density = 200.0
+
+[sub_resource type="Sky" id="Sky_forest"]
+sky_material = SubResource("ShaderMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_forest"]
+background_mode = 2
+sky = SubResource("Sky_forest")
+ambient_light_source = 3
+ambient_light_color = Color(0.1, 0.3, 0.15, 1)
+ambient_light_energy = 0.8
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.8
+ssao_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.08, 0.2, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_ground"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
+top_radius = 0.8
+bottom_radius = 1.2
+height = 8.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trunk"]
+albedo_color = Color(0.25, 0.15, 0.08, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="SphereMesh_foliage"]
+radius = 4.0
+height = 8.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_foliage"]
+albedo_color = Color(0.1, 0.4, 0.15, 1)
+roughness = 0.8
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fireflies"]
+emission_shape = 3
+emission_box_extents = Vector3(80, 20, 80)
+gravity = Vector3(0, 0.01, 0)
+initial_velocity_min = 0.02
+initial_velocity_max = 0.08
+angular_velocity_min = -0.5
+angular_velocity_max = 0.5
+scale_min = 0.03
+scale_max = 0.08
+color = Color(0.8, 1, 0.3, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_firefly"]
+size = Vector3(0.08, 0.08, 0.08)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_leaves"]
+emission_shape = 3
+emission_box_extents = Vector3(100, 30, 100)
+gravity = Vector3(0, -0.05, 0)
+initial_velocity_min = 0.05
+initial_velocity_max = 0.2
+angular_velocity_min = -2.0
+angular_velocity_max = 2.0
+scale_min = 0.02
+scale_max = 0.06
+color = Color(0.2, 0.6, 0.2, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leaf"]
+size = Vector3(0.1, 0.1, 0.02)
+
+[node name="ForestWorld" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_forest")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707, -0.5, 0.5, 0, 0.707, 0.707, -0.707, -0.354, 0.354, 20, 30, 20)
+light_color = Color(0.4, 0.7, 0.3, 1)
+light_energy = 0.7
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_ground")
+surface_material_override/0 = SubResource("StandardMaterial3D_ground")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_ground")
+
+[node name="Trees" type="Node3D" parent="."]
+
+[node name="Tree1" type="Node3D" parent="Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 4, -20)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree1"]
+mesh = SubResource("CylinderMesh_trunk")
+surface_material_override/0 = SubResource("StandardMaterial3D_trunk")
+
+[node name="Foliage" type="MeshInstance3D" parent="Trees/Tree1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+mesh = SubResource("SphereMesh_foliage")
+surface_material_override/0 = SubResource("StandardMaterial3D_foliage")
+
+[node name="Tree2" type="Node3D" parent="Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 4, -15)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree2"]
+mesh = SubResource("CylinderMesh_trunk")
+surface_material_override/0 = SubResource("StandardMaterial3D_trunk")
+
+[node name="Foliage" type="MeshInstance3D" parent="Trees/Tree2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+mesh = SubResource("SphereMesh_foliage")
+surface_material_override/0 = SubResource("StandardMaterial3D_foliage")
+
+[node name="Tree3" type="Node3D" parent="Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 4, 10)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree3"]
+mesh = SubResource("CylinderMesh_trunk")
+surface_material_override/0 = SubResource("StandardMaterial3D_trunk")
+
+[node name="Foliage" type="MeshInstance3D" parent="Trees/Tree3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+mesh = SubResource("SphereMesh_foliage")
+surface_material_override/0 = SubResource("StandardMaterial3D_foliage")
+
+[node name="Tree4" type="Node3D" parent="Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 4, 20)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree4"]
+mesh = SubResource("CylinderMesh_trunk")
+surface_material_override/0 = SubResource("StandardMaterial3D_trunk")
+
+[node name="Foliage" type="MeshInstance3D" parent="Trees/Tree4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+mesh = SubResource("SphereMesh_foliage")
+surface_material_override/0 = SubResource("StandardMaterial3D_foliage")
+
+[node name="Tree5" type="Node3D" parent="Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4, 25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree5"]
+mesh = SubResource("CylinderMesh_trunk")
+surface_material_override/0 = SubResource("StandardMaterial3D_trunk")
+
+[node name="Foliage" type="MeshInstance3D" parent="Trees/Tree5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+mesh = SubResource("SphereMesh_foliage")
+surface_material_override/0 = SubResource("StandardMaterial3D_foliage")
+
+[node name="PortalToRift" parent="." instance=ExtResource("2_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 30)
+world_id = "the-rift"
+world_name = "The Rift"
+world_url = "res://scenes/the_rift/the_rift.tscn"
+portal_color = Color(0.6, 0.3, 1, 1)
+
+[node name="Label3D" type="Label3D" parent="PortalToRift"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+pixel_size = 0.02
+billboard = 1
+text = "The Rift"
+font_size = 48
+outline_size = 8
+modulate = Color(0.6, 0.3, 1, 1)
+
+[node name="PortalToLimbo" parent="." instance=ExtResource("2_portal")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1, -30)
+world_id = "limbo"
+world_name = "Limbo"
+world_url = "local"
+portal_color = Color(0, 0.835, 1, 1)
+
+[node name="Label3D" type="Label3D" parent="PortalToLimbo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+pixel_size = 0.02
+billboard = 1
+text = "Limbo"
+font_size = 48
+outline_size = 8
+modulate = Color(0, 0.835, 1, 1)
+
+[node name="Crystals" type="Node3D" parent="."]
+
+[node name="Crystal1" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.5, 8)
+crystal_color = Color(0.2, 0.9, 0.3, 1)
+
+[node name="Crystal2" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2, -8)
+crystal_color = Color(0.3, 1, 0.4, 1)
+
+[node name="Crystal3" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+crystal_color = Color(0.4, 0.8, 0.2, 1)
+
+[node name="Fireflies" type="GPUParticles3D" parent="."]
+amount = 200
+lifetime = 12.0
+process_material = SubResource("ParticleProcessMaterial_fireflies")
+draw_pass_1 = SubResource("BoxMesh_firefly")
+
+[node name="FallingLeaves" type="GPUParticles3D" parent="."]
+amount = 300
+lifetime = 8.0
+process_material = SubResource("ParticleProcessMaterial_leaves")
+draw_pass_1 = SubResource("BoxMesh_leaf")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

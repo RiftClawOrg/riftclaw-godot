@@ -142,7 +142,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_grid")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -15)
 world_id = "the-rift"
 world_name = "The Rift"
-world_url = "https://rift.riftclaw.com"
+world_url = "res://scenes/the_rift/the_rift.tscn"
 
 [node name="PortalGlow" type="GPUParticles3D" parent="Portal"]
 amount = 200

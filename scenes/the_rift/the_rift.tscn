@@ -1,0 +1,184 @@
+[gd_scene load_steps=20 format=3 uid="uid://the_rift_world_001"]
+
+[ext_resource type="PackedScene" uid="uid://player_human_001" path="res://scenes/player_human.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://portal_scene_002" path="res://scenes/components/portal.tscn" id="2_portal"]
+[ext_resource type="PackedScene" uid="uid://crystal_scene_002" path="res://scenes/components/crystal.tscn" id="3_crystal"]
+[ext_resource type="Shader" path="res://resources/shaders/night_sky.gdshader" id="4_night_sky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("4_night_sky")
+shader_parameter/sky_color = Color(0.02, 0.01, 0.05, 1)
+shader_parameter/star_density = 350.0
+
+[sub_resource type="Sky" id="Sky_rift"]
+sky_material = SubResource("ShaderMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_rift"]
+background_mode = 2
+sky = SubResource("Sky_rift")
+ambient_light_source = 3
+ambient_light_color = Color(0.2, 0.15, 0.3, 1)
+ambient_light_energy = 0.7
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 1.0
+ssao_enabled = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_platform"]
+top_radius = 30.0
+bottom_radius = 30.0
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_platform"]
+albedo_color = Color(0.08, 0.06, 0.12, 1)
+roughness = 0.6
+metallic = 0.3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_platform"]
+radius = 30.0
+height = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rings"]
+shader = ExtResource("4_night_sky")
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring"]
+inner_radius = 35.0
+outer_radius = 37.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ring"]
+albedo_color = Color(0.5, 0.3, 0.8, 1)
+emission_enabled = true
+emission = Color(0.3, 0.1, 0.5, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_energy"]
+emission_shape = 6
+emission_sphere_radius = 40.0
+gravity = Vector3(0, 0.05, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.5
+angular_velocity_min = -1.0
+angular_velocity_max = 1.0
+scale_min = 0.05
+scale_max = 0.15
+color = Color(0.6, 0.3, 1, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_energy"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ambient"]
+emission_shape = 3
+emission_box_extents = Vector3(60, 40, 60)
+gravity = Vector3(0, 0.02, 0)
+initial_velocity_min = 0.01
+initial_velocity_max = 0.05
+scale_min = 0.02
+scale_max = 0.06
+color = Color(0.5, 0.8, 1, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ambient"]
+size = Vector3(0.05, 0.05, 0.05)
+
+[node name="TheRift" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rift")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, -0.707, 0.5, 0, 0.707, 0.707, -0.866, -0.354, 0.354, 10, 20, 10)
+light_color = Color(0.6, 0.3, 1, 1)
+light_energy = 0.6
+shadow_enabled = true
+
+[node name="Platform" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+mesh = SubResource("CylinderMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Platform"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform/StaticBody3D"]
+shape = SubResource("CylinderShape3D_platform")
+
+[node name="Ring1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 5, 0)
+mesh = SubResource("TorusMesh_ring")
+surface_material_override/0 = SubResource("StandardMaterial3D_ring")
+
+[node name="Ring2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 10, 0)
+mesh = SubResource("TorusMesh_ring")
+surface_material_override/0 = SubResource("StandardMaterial3D_ring")
+
+[node name="EnergyParticles" type="GPUParticles3D" parent="."]
+amount = 300
+lifetime = 5.0
+process_material = SubResource("ParticleProcessMaterial_energy")
+draw_pass_1 = SubResource("BoxMesh_energy")
+
+[node name="PortalToLimbo" parent="." instance=ExtResource("2_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 25)
+world_id = "limbo"
+world_name = "Limbo"
+world_url = "local"
+portal_color = Color(0, 0.835, 1, 1)
+
+[node name="Label3D" type="Label3D" parent="PortalToLimbo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+pixel_size = 0.02
+billboard = 1
+text = "Limbo"
+font_size = 48
+outline_size = 8
+modulate = Color(0, 0.835, 1, 1)
+
+[node name="PortalToForest" parent="." instance=ExtResource("2_portal")]
+transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -21.65, 1, -12.5)
+world_id = "forest"
+world_name = "Forest World"
+world_url = "res://scenes/forest/forest.tscn"
+portal_color = Color(0.2, 0.9, 0.3, 1)
+
+[node name="Label3D" type="Label3D" parent="PortalToForest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+pixel_size = 0.02
+billboard = 1
+text = "Forest World"
+font_size = 48
+outline_size = 8
+modulate = Color(0.2, 0.9, 0.3, 1)
+
+[node name="Crystals" type="Node3D" parent="."]
+
+[node name="Crystal1" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)
+crystal_color = Color(0.6, 0.2, 1, 1)
+
+[node name="Crystal2" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 3, -8)
+crystal_color = Color(0.8, 0.3, 0.9, 1)
+
+[node name="Crystal3" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4, 15)
+crystal_color = Color(0.4, 0.2, 0.8, 1)
+
+[node name="Crystal4" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 2.5, 12)
+crystal_color = Color(0.7, 0.2, 0.6, 1)
+
+[node name="Crystal5" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+crystal_color = Color(0.9, 0.4, 0.7, 1)
+
+[node name="Crystal6" parent="Crystals" instance=ExtResource("3_crystal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 3, -5)
+crystal_color = Color(0.5, 0.3, 1, 1)
+
+[node name="AmbientParticles" type="GPUParticles3D" parent="."]
+amount = 400
+lifetime = 15.0
+process_material = SubResource("ParticleProcessMaterial_ambient")
+draw_pass_1 = SubResource("BoxMesh_ambient")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
