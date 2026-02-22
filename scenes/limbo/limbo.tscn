@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/components/portal.tscn" id="2_portal"]
 [ext_resource type="PackedScene" path="res://scenes/components/crystal.tscn" id="3_crystal"]
-[ext_resource type="Script" path="res://scenes/components/grid_helper.gd" id="4_grid"]
 
 [sub_resource type="Environment" id="Environment_limbo"]
 background_color = Color(0.0196078, 0.0196078, 0.0627451, 1)
@@ -23,13 +22,8 @@ albedo_color = Color(0.0392157, 0.0392157, 0.0823529, 1)
 roughness = 0.8
 metallic = 0.2
 
-[sub_resource type="BoxMesh" id="BoxMesh_crystal"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_crystal"]
-albedo_color = Color(1, 0, 1, 1)
-emission_enabled = true
-emission = Color(1, 0, 1, 1)
-emission_energy_multiplier = 0.3
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_floor"]
+plane = Plane(0, 1, 0, 0)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_stars"]
 emission_shape = 6
@@ -40,11 +34,6 @@ initial_velocity_max = 0.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_star"]
 size = Vector3(0.05, 0.05, 0.05)
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_floor"]
-plane = Plane(0, 1, 0, 0)
-
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_grid"]
 
 [node name="Limbo" type="Node3D"]
 
@@ -65,13 +54,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_floor")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
 shape = SubResource("WorldBoundaryShape3D_floor")
 
-[node name="GridHelper" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
-mesh = SubResource("ImmediateMesh_grid")
-script = ExtResource("4_grid")
-
-[node name="Grid" type="GridMap" parent="."]
-
 [node name="Portal" parent="." instance=ExtResource("2_portal")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -10)
 world_id = "the-rift"
@@ -82,7 +64,7 @@ world_url = "https://rift.riftclaw.com"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 pixel_size = 0.05
 billboard = 1
-text = "The Rift Portal →"
+text = "The Rift Portal ->"
 font_size = 64
 outline_size = 8
 modulate = Color(0, 0.835294, 1, 1)
