@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://limbo_world_v2"]
 
-[ext_resource type="PackedScene" uid="uid://player_scene_002" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://player_human_001" path="res://scenes/player_human.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://portal_scene_002" path="res://scenes/components/portal.tscn" id="2_portal"]
 [ext_resource type="PackedScene" uid="uid://crystal_scene_002" path="res://scenes/components/crystal.tscn" id="3_crystal"]
 [ext_resource type="Shader" path="res://resources/shaders/grid_shader.gdshader" id="4_grid_shader"]
