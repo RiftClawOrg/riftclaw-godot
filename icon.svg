@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="128" height="128" fill="#0a0a15"/>
+  
+  <!-- Outer ring (portal frame) -->
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#00d5ff" stroke-width="4"/>
+  
+  <!-- Inner glow -->
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#00d5ff" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Center swirl (portal vortex) -->
+  <path d="M64 32 Q80 48 64 64 Q48 80 64 96 Q80 80 64 64 Q48 48 64 32" 
+        fill="none" stroke="#00ffff" stroke-width="3" opacity="0.8"/>
+  
+  <!-- Inner core -->
+  <circle cx="64" cy="64" r="16" fill="#00ffff" opacity="0.3"/>
+  <circle cx="64" cy="64" r="8" fill="#00d5ff"/>
+  
+  <!-- Sparkle accents -->
+  <circle cx="24" cy="24" r="2" fill="#ffffff" opacity="0.8"/>
+  <circle cx="104" cy="24" r="2" fill="#ffffff" opacity="0.8"/>
+  <circle cx="24" cy="104" r="2" fill="#ffffff" opacity="0.8"/>
+  <circle cx="104" cy="104" r="2" fill="#ffffff" opacity="0.8"/>
+</svg>
