@@ -7,6 +7,17 @@
 [ext_resource type="Shader" path="res://resources/shaders/sky_starfield.gdshader" id="5_sky_shader"]
 [ext_resource type="Shader" path="res://resources/shaders/dust_shader.gdshader" id="6_dust_shader"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("5_sky_shader")
+shader_parameter/sky_top = Color(0.02, 0.02, 0.06, 1)
+shader_parameter/sky_bottom = Color(0.01, 0.01, 0.04, 1)
+shader_parameter/star_density = 300.0
+shader_parameter/star_brightness = 1.2
+shader_parameter/twinkle_speed = 0.8
+
+[sub_resource type="Sky" id="Sky_starfield"]
+sky_material = SubResource("ShaderMaterial_sky")
+
 [sub_resource type="Environment" id="Environment_limbo_v2"]
 background_mode = 2
 sky = SubResource("Sky_starfield")
@@ -39,17 +50,6 @@ shader_parameter/center_color = Color(0, 0.835, 1, 1)
 shader_parameter/grid_size = 100.0
 shader_parameter/divisions = 50.0
 shader_parameter/line_width = 0.02
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
-shader = ExtResource("5_sky_shader")
-shader_parameter/sky_top = Color(0.02, 0.02, 0.06, 1)
-shader_parameter/sky_bottom = Color(0.01, 0.01, 0.04, 1)
-shader_parameter/star_density = 300.0
-shader_parameter/star_brightness = 1.2
-shader_parameter/twinkle_speed = 0.8
-
-[sub_resource type="Sky" id="Sky_starfield"]
-sky_material = SubResource("ShaderMaterial_sky")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_portal_glow"]
 emission_shape = 1
