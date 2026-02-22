@@ -40,7 +40,7 @@ radius = 30.0
 height = 2.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rings"]
-shader = ExtResource("4_night_sky")
+shader = ExtResource("5_night_sky")
 
 [sub_resource type="TorusMesh" id="TorusMesh_ring"]
 inner_radius = 35.0
