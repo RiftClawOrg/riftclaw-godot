@@ -21,10 +21,7 @@ sky = SubResource("Sky_starfield")
 ambient_light_source = 3
 ambient_light_color = Color(0.15, 0.15, 0.25, 1)
 ambient_light_energy = 0.8
-fog_enabled = true
-fog_mode = 1
-fog_color = Color(0.01, 0.01, 0.03, 1)
-fog_density = 0.005
+fog_enabled = false
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_floor_v2"]
 size = Vector2(100, 100)
