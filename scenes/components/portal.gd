@@ -11,7 +11,7 @@ signal player_entered(world_name: String, world_url: String)
 
 @onready var frame_mesh: MeshInstance3D = $Frame
 @onready var center_mesh: MeshInstance3D = $Center
-@onready var particles: GPUParticles3D = $Particles
+@onready var particles: GPUParticles3D = $Particles if has_node("Particles") else null
 
 var rotation_speed: float = 1.0
 
