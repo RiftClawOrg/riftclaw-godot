@@ -5,8 +5,8 @@ extends CharacterBody3D
 @export var walk_speed: float = 5.0
 @export var jump_force: float = 8.0
 @export var gravity: float = 20.0
-@export var camera_distance: float = 5.0
-@export var camera_height: float = 2.0
+@export var camera_distance: float = 4.0
+@export var camera_height: float = 2.5
 @export var min_camera_distance: float = 2.0
 @export var max_camera_distance: float = 15.0
 @export var zoom_speed: float = 0.5
@@ -22,8 +22,8 @@ var is_mouse_captured: bool = false
 
 func _ready():
 	print("[Player] Initialized")
-	# Start at spawn position
-	position = Vector3(0, 1.6, 5)
+	# Start at spawn position (y=1.0 to prevent floor clipping)
+	position = Vector3(0, 1.0, 8)
 	
 	# Capture mouse for camera control
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
