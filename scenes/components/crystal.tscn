@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://crystal123"]
+
+[ext_resource type="Script" path="res://scenes/components/crystal.gd" id="1_crystal"]
+
+[sub_resource type="OctahedronMesh" id="OctahedronMesh_crystal"]
+radius = 0.3
+
+[node name="Crystal" type="Node3D"]
+script = ExtResource("1_crystal")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("OctahedronMesh_crystal")

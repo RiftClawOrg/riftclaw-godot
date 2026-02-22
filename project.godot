@@ -89,4 +89,3 @@ toggle_help={
 PassportManager="*res://autoload/passport_manager.gd"
 InventoryManager="*res://autoload/inventory_manager.gd"
 SceneManager="*res://autoload/scene_manager.gd"
-NetworkManager="*res://autoload/network_manager.gd"
