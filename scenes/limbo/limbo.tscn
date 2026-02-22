@@ -9,10 +9,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
 shader = ExtResource("5_night_sky")
-shader_parameter/sky_top = Color(0.002, 0.002, 0.01, 1)
-shader_parameter/sky_bottom = Color(0.01, 0.01, 0.04, 1)
-shader_parameter/star_density = 400.0
-shader_parameter/star_brightness = 2.0
+shader_parameter/sky_color = Color(0.005, 0.005, 0.015, 1)
+shader_parameter/star_density = 250.0
 
 [sub_resource type="Sky" id="Sky_starfield"]
 sky_material = SubResource("ShaderMaterial_sky")
@@ -21,9 +19,33 @@ sky_material = SubResource("ShaderMaterial_sky")
 background_mode = 2
 sky = SubResource("Sky_starfield")
 ambient_light_source = 3
-ambient_light_color = Color(0.15, 0.15, 0.25, 1)
-ambient_light_energy = 0.8
-fog_enabled = false
+ambient_light_color = Color(0.1, 0.1, 0.2, 1)
+ambient_light_energy = 0.6
+tonemap_mode = 2
+tonemap_exposure = 1.0
+tonemap_white = 1.5
+ssr_enabled = true
+ssr_max_steps = 64
+ssr_fade_in = 0.15
+ssr_fade_out = 2.0
+ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 2.0
+ssao_power = 1.5
+ssil_enabled = true
+glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/3 = 0.8
+glow_levels/4 = 0.6
+glow_levels/5 = 0.4
+glow_intensity = 1.2
+glow_strength = 0.8
+glow_bloom = 0.4
+glow_blend_mode = 1
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.15
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_floor_v2"]
 size = Vector2(100, 100)
@@ -129,13 +151,13 @@ process_material = SubResource("ParticleProcessMaterial_portal_glow")
 draw_pass_1 = SubResource("BoxMesh_particle")
 
 [node name="Label3D" type="Label3D" parent="Portal"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-pixel_size = 0.03
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+pixel_size = 0.02
 billboard = 1
-text = "THE RIFT"
-font_size = 96
-outline_size = 12
-modulate = Color(0, 0.9, 1, 1)
+text = "The Rift"
+font_size = 48
+outline_size = 8
+modulate = Color(0, 0.835, 1, 1)
 
 [node name="Crystals" type="Node3D" parent="."]
 

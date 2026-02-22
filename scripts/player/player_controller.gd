@@ -7,6 +7,9 @@ extends CharacterBody3D
 @export var gravity: float = 20.0
 @export var camera_distance: float = 5.0
 @export var camera_height: float = 2.0
+@export var min_camera_distance: float = 2.0
+@export var max_camera_distance: float = 15.0
+@export var zoom_speed: float = 0.5
 @export var camera_smoothness: float = 0.1
 @export var mouse_sensitivity: float = 0.005
 
@@ -32,6 +35,13 @@ func _input(event):
 		camera_yaw -= event.relative.x * mouse_sensitivity
 		camera_pitch += event.relative.y * mouse_sensitivity
 		camera_pitch = clamp(camera_pitch, -1.0, 1.0)
+	
+	# Handle mouse zoom
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			camera_distance = max(camera_distance - zoom_speed, min_camera_distance)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			camera_distance = min(camera_distance + zoom_speed, max_camera_distance)
 	
 	# Toggle mouse capture with Escape
 	if event.is_action_pressed("ui_cancel"):
