@@ -47,10 +47,6 @@ func setup_visuals():
 func _process(delta):
 	# Rotate portal frame
 	rotate_y(rotation_speed * delta)
-	
-	# Pulse center
-	var pulse = 0.8 + 0.2 * sin(Time.get_time_dict_from_system()["second"] * 2.0)
-	center_mesh.scale = Vector3.ONE * pulse
 
 func _on_body_entered(body: Node3D):
 	if body.is_in_group("player"):

@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://limbo_world_v2"]
+[gd_scene load_steps=19 format=3 uid="uid://limbo_world_v2"]
 
 [ext_resource type="PackedScene" uid="uid://player_scene_002" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://portal_scene_002" path="res://scenes/components/portal.tscn" id="2_portal"]
 [ext_resource type="PackedScene" uid="uid://crystal_scene_002" path="res://scenes/components/crystal.tscn" id="3_crystal"]
 [ext_resource type="Shader" path="res://resources/shaders/grid_shader.gdshader" id="4_grid_shader"]
 [ext_resource type="Shader" path="res://resources/shaders/starfield_shader.gdshader" id="5_star_shader"]
+[ext_resource type="Shader" path="res://resources/shaders/dust_shader.gdshader" id="6_dust_shader"]
 
 [sub_resource type="Environment" id="Environment_limbo_v2"]
 background_color = Color(0.0196078, 0.0196078, 0.0627451, 1)
@@ -67,6 +68,33 @@ color = Color(0, 0.835, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_particle"]
 size = Vector3(0.05, 0.05, 0.05)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dust"]
+radius = 150.0
+height = 300.0
+radial_segments = 32
+rings = 32
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dust"]
+shader = ExtResource("6_dust_shader")
+shader_parameter/dust_color = Color(0.5, 0.7, 1, 0.2)
+shader_parameter/dust_density = 40.0
+shader_parameter/drift_speed = 0.3
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ambient"]
+emission_shape = 3
+emission_box_extents = Vector3(80, 30, 80)
+gravity = Vector3(0, 0.02, 0)
+initial_velocity_min = 0.01
+initial_velocity_max = 0.05
+angular_velocity_min = -0.5
+angular_velocity_max = 0.5
+scale_min = 0.01
+scale_max = 0.04
+color = Color(0.6, 0.8, 1, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ambient"]
+size = Vector3(0.02, 0.02, 0.02)
 
 [node name="Limbo" type="Node3D"]
 
@@ -171,3 +199,19 @@ crystal_color = Color(0.9, 0.6, 0.2, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 8)
+
+[node name="DustAtmosphere" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_dust")
+surface_material_override/0 = SubResource("ShaderMaterial_dust")
+
+[node name="AmbientParticles" type="GPUParticles3D" parent="."]
+amount = 500
+lifetime = 20.0
+process_material = SubResource("ParticleProcessMaterial_ambient")
+draw_pass_1 = SubResource("BoxMesh_ambient")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+size = Vector3(100, 50, 100)
+intensity = 0.5
+enable_shadows = true
