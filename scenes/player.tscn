@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://player_scene_001"]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_abc123"]
 
@@ -14,11 +14,10 @@ emission_energy_multiplier = 0.5
 [sub_resource type="BoxShape3D" id="BoxShape3D_abc123"]
 size = Vector3(0.5, 1.8, 0.5)
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_abc123")
-add_to_group("player")
 
 [node name="Visual" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
